@@ -42,7 +42,7 @@ public class PlayerListener implements Listener {
 
         Inventory i = player.getInventory();
         i.setItem(0, Menu.menuCompass());
-        i.setItem(8, Menu.invisibleWatch());
+        i.setItem(8, Menu.invisibleGelInactive());
 
         event.setJoinMessage(null);
         player.sendMessage(ChatColor.GREEN + "Welcome to " + ChatColor.BOLD + "Eye Of Ender! " + ChatColor.GREEN + "Click a sign to join a server.");
@@ -96,25 +96,21 @@ public class PlayerListener implements Listener {
 
         if (event.getItem() == null) return;
 
-        if ((event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
-                && event.getItem().getType() == Material.WATCH) {
-            player.playSound(player.getLocation(), Sound.ORB_PICKUP, 20L, 20L);
+        if ((event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 
-            if (!plugin.invisible.contains(player)) {
+            if (event.getItem().isSimilar(Menu.invisibleGelInactive())) {
+                player.playSound(player.getLocation(), Sound.SLIME_ATTACK, 20L, 1L);
                 for (Player players : Bukkit.getOnlinePlayers()) {
                     player.hidePlayer(players);
                 }
-
                 plugin.invisible.add(player);
-
                 player.sendMessage(ChatColor.BLUE + "Players are now invisible!");
-            } else {
+            } else if (event.getItem().isSimilar(Menu.invisibleGelActive())) {
+                player.playSound(player.getLocation(), Sound.ORB_PICKUP, 20L, 20L);
                 for (Player players : Bukkit.getOnlinePlayers()) {
                     player.showPlayer(players);
                 }
-
                 plugin.invisible.remove(player);
-
                 player.sendMessage(ChatColor.BLUE + "Players are now visible!");
             }
         }
