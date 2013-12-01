@@ -1,0 +1,6 @@
+name: EOEHub
+version: 1.0.0
+main: com.eyeofender.eoehub.EOEHub
+commands:
+  setspawn:
+  spawn:
