@@ -28,36 +28,36 @@ import com.eyeofender.eoehub.menus.Menu;
 
 public class PlayerListener implements Listener {
 
-	EOEHub plugin;
-	
-	public PlayerListener ( EOEHub plugin ){
-		this.plugin = plugin;
-	}
-	
-	@EventHandler
-	public void onPlayerJoinHub(PlayerJoinEvent event){
-		Player player = event.getPlayer();
-		player.setGameMode(GameMode.SURVIVAL);
-		player.getInventory().clear();
-		
-		Inventory i = player.getInventory();
-		i.setItem(0, Menu.menuCompass());
-		i.setItem(8, Menu.invisibleWatch());
-		
-		event.setJoinMessage(null);
-		player.sendMessage(ChatColor.GREEN + "Welcome to " + ChatColor.BOLD +  "Eye Of Ender! " + ChatColor.GREEN + "Click a sign to join a server.");
-		plugin.teleportPlayer(player, plugin.l);
-		
-        for(Player players : Bukkit.getOnlinePlayers()){
-        	if(plugin.invisible.contains(players)){
-        		players.hidePlayer(event.getPlayer());
-        	}else{
-        		players.showPlayer(event.getPlayer());
-        	}
+    EOEHub plugin;
+
+    public PlayerListener(EOEHub plugin) {
+        this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void onPlayerJoinHub(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        player.setGameMode(GameMode.SURVIVAL);
+        player.getInventory().clear();
+
+        Inventory i = player.getInventory();
+        i.setItem(0, Menu.menuCompass());
+        i.setItem(8, Menu.invisibleWatch());
+
+        event.setJoinMessage(null);
+        player.sendMessage(ChatColor.GREEN + "Welcome to " + ChatColor.BOLD + "Eye Of Ender! " + ChatColor.GREEN + "Click a sign to join a server.");
+        plugin.teleportPlayer(player, plugin.l);
+
+        for (Player players : Bukkit.getOnlinePlayers()) {
+            if (plugin.invisible.contains(players)) {
+                players.hidePlayer(event.getPlayer());
+            } else {
+                players.showPlayer(event.getPlayer());
+            }
         }
-	}
-	
-	@EventHandler(priority = EventPriority.HIGHEST)
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onKick(PlayerKickEvent event) {
         event.setLeaveMessage(null);
     }
@@ -66,79 +66,79 @@ public class PlayerListener implements Listener {
     public void onLeave(PlayerQuitEvent event) {
         event.setQuitMessage(null);
     }
-    
+
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
-            if(event.getAction() == Action.PHYSICAL) {
-            //The player triggered a physical interaction event
-             
-            if(event.getClickedBlock().getType() == Material.STONE_PLATE) {
-            //The player stepped on a stone pressure plate
-             
-                    event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(5));
-            event.getPlayer().setVelocity(new Vector(event.getPlayer().getVelocity().getX(), 1.0D, event.getPlayer().getVelocity().getZ()));
+        if (event.getAction() == Action.PHYSICAL) {
+            // The player triggered a physical interaction event
+
+            if (event.getClickedBlock().getType() == Material.STONE_PLATE) {
+                // The player stepped on a stone pressure plate
+
+                event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(5));
+                event.getPlayer().setVelocity(new Vector(event.getPlayer().getVelocity().getX(), 1.0D, event.getPlayer().getVelocity().getZ()));
             }
         }
     }
-    
+
     @EventHandler
-    public void onPlayerDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof Player) {
-            Player p = (Player) e.getEntity();
-            if (e.getCause() == DamageCause.FALL) {
-                e.setDamage(0.0);
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            if (event.getCause() == DamageCause.FALL) {
+                event.setDamage(0.0);
             }
         }
     }
-    
+
     @EventHandler
-    public void onPlayerInteractEvent(PlayerInteractEvent event){
-    	Player player = event.getPlayer();
-    	
-    	if(event.getItem() == null) return;
-    	
-    	if((event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) && event.getItem().getType() == Material.WATCH){
-			player.playSound(player.getLocation(), Sound.ORB_PICKUP, 20L, 20L);
-			
-			if(!plugin.invisible.contains(player)){
-				for(Player players : Bukkit.getOnlinePlayers()){
-					player.hidePlayer(players);
-				}
-				
-				plugin.invisible.add(player);
-				
-				player.sendMessage(ChatColor.BLUE + "Players are now invisible!");
-			}else{
-				for(Player players : Bukkit.getOnlinePlayers()){
-					player.showPlayer(players);
-				}
-				
-				plugin.invisible.remove(player);
-				
-				player.sendMessage(ChatColor.BLUE + "Players are now visible!");
-			}
-		}
+    public void onPlayerInteractEvent(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+
+        if (event.getItem() == null) return;
+
+        if ((event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+                && event.getItem().getType() == Material.WATCH) {
+            player.playSound(player.getLocation(), Sound.ORB_PICKUP, 20L, 20L);
+
+            if (!plugin.invisible.contains(player)) {
+                for (Player players : Bukkit.getOnlinePlayers()) {
+                    player.hidePlayer(players);
+                }
+
+                plugin.invisible.add(player);
+
+                player.sendMessage(ChatColor.BLUE + "Players are now invisible!");
+            } else {
+                for (Player players : Bukkit.getOnlinePlayers()) {
+                    player.showPlayer(players);
+                }
+
+                plugin.invisible.remove(player);
+
+                player.sendMessage(ChatColor.BLUE + "Players are now visible!");
+            }
+        }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
     public void onWeatherUpdate(WeatherChangeEvent event) {
-            if (event.toWeatherState() && !plugin.getConfig().getBoolean("weather-enabled")){
-                    event.setCancelled(true);
-            }
+        if (event.toWeatherState() && !plugin.getConfig().getBoolean("weather-enabled")) {
+            event.setCancelled(true);
+        }
     }
-    
+
     @EventHandler
-    public void onItemThrow(PlayerDropItemEvent event){
-    	event.setCancelled(true);
+    public void onItemThrow(PlayerDropItemEvent event) {
+        event.setCancelled(true);
     }
-    
+
     @EventHandler
-    public void onItemPickUp(PlayerPickupItemEvent event){
-    	event.setCancelled(true);
+    public void onItemPickUp(PlayerPickupItemEvent event) {
+        event.setCancelled(true);
     }
-    
+
     @EventHandler
-    public void onPlayerHunger(FoodLevelChangeEvent event){
-    	event.setCancelled(true);
+    public void onPlayerHunger(FoodLevelChangeEvent event) {
+        event.setCancelled(true);
     }
 }
