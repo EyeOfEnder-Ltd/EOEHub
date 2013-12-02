@@ -14,10 +14,13 @@ import com.google.common.collect.ImmutableList;
 public class BarTimer implements Runnable {
 
     private static Random rand = new Random();
+    private static ChatColor[] validColors = { ChatColor.AQUA, ChatColor.BLUE, ChatColor.DARK_AQUA, ChatColor.DARK_BLUE, ChatColor.DARK_GREEN, ChatColor.DARK_PURPLE, ChatColor.DARK_RED,
+            ChatColor.GOLD, ChatColor.GREEN, ChatColor.LIGHT_PURPLE, ChatColor.RED, ChatColor.YELLOW };
 
     private EOEHub plugin;
     private int timer;
     private List<String> messages;
+    private int message;
 
     public BarTimer(EOEHub plugin) {
         this.plugin = plugin;
@@ -31,7 +34,7 @@ public class BarTimer implements Runnable {
 
     @Override
     public void run() {
-        int message = timer / 10;
+        if (timer % 10 == 0) message = timer / 10;
 
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             BarAPI.setMessage(player, getRandomColor() + "-=- " + messages.get(message - 1) + " -=-");
@@ -43,6 +46,6 @@ public class BarTimer implements Runnable {
     }
 
     private ChatColor getRandomColor() {
-        return ChatColor.values()[rand.nextInt(ChatColor.values().length)];
+        return validColors[rand.nextInt(validColors.length)];
     }
 }
