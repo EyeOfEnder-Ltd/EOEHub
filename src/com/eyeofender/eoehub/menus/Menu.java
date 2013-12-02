@@ -29,6 +29,9 @@ public class Menu implements Listener {
         Player player = (Player) event.getWhoClicked();
         ItemStack clicked = event.getCurrentItem();
         Inventory inventory = event.getInventory();
+
+        if (clicked == null) return;
+
         if (inventory.getName().equals(myInventory.getName())) {
             if (clicked.getType() == Material.DIAMOND_SWORD) {
                 event.setCancelled(true);

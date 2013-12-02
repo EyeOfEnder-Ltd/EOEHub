@@ -99,18 +99,20 @@ public class PlayerListener implements Listener {
         if ((event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 
             if (event.getItem().isSimilar(Menu.invisibleGelInactive())) {
-                player.playSound(player.getLocation(), Sound.SLIME_ATTACK, 20L, 1L);
+                player.playSound(player.getLocation(), Sound.SLIME_ATTACK, 20L, 10L);
                 for (Player players : Bukkit.getOnlinePlayers()) {
                     player.hidePlayer(players);
                 }
                 plugin.invisible.add(player);
+                player.setItemInHand(Menu.invisibleGelActive());
                 player.sendMessage(ChatColor.BLUE + "Players are now invisible!");
             } else if (event.getItem().isSimilar(Menu.invisibleGelActive())) {
-                player.playSound(player.getLocation(), Sound.ORB_PICKUP, 20L, 20L);
+                player.playSound(player.getLocation(), Sound.SLIME_ATTACK, 20L, 10L);
                 for (Player players : Bukkit.getOnlinePlayers()) {
                     player.showPlayer(players);
                 }
                 plugin.invisible.remove(player);
+                player.setItemInHand(Menu.invisibleGelInactive());
                 player.sendMessage(ChatColor.BLUE + "Players are now visible!");
             }
         }
