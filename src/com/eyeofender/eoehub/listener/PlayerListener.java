@@ -46,7 +46,7 @@ public class PlayerListener implements Listener {
 
         event.setJoinMessage(null);
         player.sendMessage(ChatColor.GREEN + "Welcome to " + ChatColor.BOLD + "Eye Of Ender! " + ChatColor.GREEN + "Click a sign to join a server.");
-        plugin.teleportPlayer(player, plugin.l);
+        plugin.teleportPlayer(player, plugin.spawnLocation);
 
         for (Player players : Bukkit.getOnlinePlayers()) {
             if (plugin.invisible.contains(players)) {

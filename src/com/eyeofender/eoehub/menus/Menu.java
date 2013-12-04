@@ -91,7 +91,7 @@ public class Menu implements Listener {
     public static ItemStack invisibleGelActive() {
         ItemStack item = new ItemStack(Material.SLIME_BALL);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("Invisibility Gel");
+        meta.setDisplayName("Visibility Gel");
         ArrayList<String> Lore = new ArrayList<String>();
         Lore.add("Toggles player visibility.");
         meta.setLore(Lore);

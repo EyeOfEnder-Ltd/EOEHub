@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -19,7 +21,7 @@ import com.eyeofender.eoehub.timers.BarTimer;
 
 public class EOEHub extends JavaPlugin {
 
-    public Location l;
+    public Location spawnLocation;
     public Map<String, Boolean> ienvisible = new HashMap<String, Boolean>();
     public List<Player> invisible = new ArrayList<Player>();
 
@@ -32,13 +34,11 @@ public class EOEHub extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new Menu(), this);
 
         if (this.getConfig().contains("spawn")) {
-            String y = this.getConfig().getString("spawn.yaw");
-            String p = this.getConfig().getString("spawn.pitch");
+            World world = Bukkit.getWorld(getConfig().getString("spawn.world"));
+            double y = this.getConfig().getDouble("spawn.yaw");
+            double p = this.getConfig().getDouble("spawn.pitch");
 
-            float yaw = Float.parseFloat(y);
-            float pitch = Float.parseFloat(p);
-
-            l = new Location(this.getServer().getWorld("world"), this.getConfig().getInt("spawn.x"), this.getConfig().getInt("spawn.y"), this.getConfig().getInt("spawn.z"), yaw, pitch);
+            spawnLocation = new Location(world, getConfig().getInt("spawn.x"), getConfig().getInt("spawn.y"), getConfig().getInt("spawn.z"), (float) y, (float) p);
         }
 
         BarTimer barTimer = new BarTimer(this);
@@ -75,10 +75,10 @@ public class EOEHub extends JavaPlugin {
 
         if (CommandLabel.equalsIgnoreCase("spawn")) {
             if (args.length == 0) {
-                this.teleportPlayer(player, l);
+                this.teleportPlayer(player, spawnLocation);
                 player.sendMessage(ChatColor.RED + "You have been spawned.");
             } else {
-                this.teleportPlayer(player, l);
+                this.teleportPlayer(player, spawnLocation);
                 player.sendMessage(ChatColor.RED + "You have been spawned.");
             }
         }
@@ -87,8 +87,9 @@ public class EOEHub extends JavaPlugin {
     }
 
     public void teleportPlayer(Player player, Location location) {
-        Location l = location.clone().add(0.5D, 0.5D, 0.5D);
+        if (location == null) return;
 
+        Location l = location.clone().add(0.5D, 0.5D, 0.5D);
         player.teleport(l);
     }
 }
