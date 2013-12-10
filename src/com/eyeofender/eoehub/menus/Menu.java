@@ -22,7 +22,7 @@ import com.eyeofender.eoehub.EOEHub;
 import com.google.common.collect.Maps;
 
 public class Menu implements Listener {
-    public static Inventory myInventory = Bukkit.createInventory(null, 9, "   -=- Eye Of Ender Hub -=-");
+    public static Inventory myInventory = Bukkit.createInventory(null, 9, "   -=- Eye of Ender Hub -=-");
     private static Map<ItemStack, Integer> icons = Maps.newHashMap();
 
     private static EOEHub plugin;
@@ -30,10 +30,10 @@ public class Menu implements Listener {
     public static void init(EOEHub plugin) {
         Menu.plugin = plugin;
 
-        createDisplay(Material.BOW, myInventory, 1, "Archer Games", "Click to teleport");
-        createDisplay(Material.BLAZE_POWDER, myInventory, 3, "Search & Destroy", "Click to teleport");
-        createDisplay(Material.DIAMOND_SWORD, myInventory, 5, "Survival Games", "Click to teleport");
-        createDisplay(Material.RECORD_4, myInventory, 7, "Arcade Games", "Click to teleport");
+        createDisplay(Material.BOW, myInventory, 1, ChatColor.BLUE + "Archer Games");
+        createDisplay(Material.BLAZE_POWDER, myInventory, 3, ChatColor.RED + "Search & Destroy");
+        createDisplay(Material.DIAMOND_SWORD, myInventory, 5, ChatColor.GREEN + "Survival Games");
+        createDisplay(Material.RECORD_4, myInventory, 7, ChatColor.LIGHT_PURPLE + "Arcade Games");
     }
 
     @EventHandler
@@ -45,6 +45,7 @@ public class Menu implements Listener {
         if (clicked == null) return;
 
         if (inventory.getName().equals(myInventory.getName())) {
+            event.setCancelled(true);
             for (Entry<ItemStack, Integer> entry : icons.entrySet()) {
                 if (clicked.isSimilar(entry.getKey())) {
                     Location location = plugin.getLocation("icon" + entry.getValue());
@@ -65,12 +66,12 @@ public class Menu implements Listener {
         }
     }
 
-    public static void createDisplay(Material material, Inventory inv, int slot, String name, String lore) {
+    public static void createDisplay(Material material, Inventory inv, int slot, String name) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
         ArrayList<String> Lore = new ArrayList<String>();
-        Lore.add(lore);
+        Lore.add(ChatColor.GRAY + "Click to teleport");
         meta.setLore(Lore);
         item.setItemMeta(meta);
 
