@@ -1,3 +1,13 @@
 name: EOEHub
-version: 1.2.0
+version: 1.3.1
 main: com.eyeofender.eoehub.EOEHub
+commands:
+    setloc:
+        description: Sets a icon waypoint to your location.
+        usage: /<command> <waypoint>
+        permission: eoehub.command.setloc
+        aliases: announce
+permissions:
+    eoehub.command.setloc:
+        description: Permission to use the setloc command
+        default: op

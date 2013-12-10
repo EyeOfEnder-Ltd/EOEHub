@@ -1,8 +1,11 @@
 package com.eyeofender.eoehub.menus;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,14 +17,22 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class Menu implements Listener {
-    public static Inventory myInventory = Bukkit.createInventory(null, 9, "-=- Eye Of Ender Hub -=-");
+import com.eyeofender.eoehub.EOEHub;
+import com.google.common.collect.Maps;
 
-    static {
-        createDisplay(Material.BOW, myInventory, 1, "Archer Games", "Click to open kit menu.");
-        createDisplay(Material.BLAZE_POWDER, myInventory, 3, "Search & Destroy", "Coming soon.");
-        createDisplay(Material.BREAD, myInventory, 5, "Hunger Games", "Coming soon.");
-        createDisplay(Material.IRON_BLOCK, myInventory, 7, "To be announced", "Coming soon.");
+public class Menu implements Listener {
+    public static Inventory myInventory = Bukkit.createInventory(null, 9, "    -=- Eye Of Ender Hub -=-");
+    private static Map<ItemStack, Integer> icons = Maps.newHashMap();
+
+    private static EOEHub plugin;
+
+    public static void init(EOEHub plugin) {
+        Menu.plugin = plugin;
+
+        createDisplay(Material.BOW, myInventory, 1, "Archer Games", "Click to view");
+        createDisplay(Material.BLAZE_POWDER, myInventory, 3, "Search & Destroy", "Click to view");
+        createDisplay(Material.DIAMOND_SWORD, myInventory, 5, "Hunger Games", "Click to view");
+        createDisplay(Material.IRON_BLOCK, myInventory, 7, "Arcade Games", "Click to view");
     }
 
     @EventHandler
@@ -33,11 +44,13 @@ public class Menu implements Listener {
         if (clicked == null) return;
 
         if (inventory.getName().equals(myInventory.getName())) {
-            if (clicked.getType() == Material.DIAMOND_SWORD) {
-                event.setCancelled(true);
-                player.closeInventory();
-            } else {
-                event.setCancelled(true);
+            for (Entry<ItemStack, Integer> entry : icons.entrySet()) {
+                if (clicked.isSimilar(entry.getKey())) {
+                    Location location = plugin.getLocation("icon" + entry.getValue());
+                    player.closeInventory();
+                    if (location != null) player.teleport(location);
+                    break;
+                }
             }
         }
     }
@@ -51,7 +64,7 @@ public class Menu implements Listener {
         }
     }
 
-    public static void createDisplay(Material material, Inventory inv, int Slot, String name, String lore) {
+    public static void createDisplay(Material material, Inventory inv, int slot, String name, String lore) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
@@ -60,8 +73,8 @@ public class Menu implements Listener {
         meta.setLore(Lore);
         item.setItemMeta(meta);
 
-        inv.setItem(Slot, item);
-
+        inv.setItem(slot, item);
+        icons.put(item, slot);
     }
 
     public static ItemStack menuCompass() {
