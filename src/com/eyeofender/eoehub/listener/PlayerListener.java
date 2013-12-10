@@ -44,8 +44,8 @@ public class PlayerListener implements Listener {
         player.getInventory().clear();
 
         Inventory i = player.getInventory();
-        i.setItem(0, Menu.menuCompass());
-        i.setItem(8, Menu.invisibleGelInactive());
+        i.setItem(0, Menu.menuItem());
+        i.setItem(8, Menu.invisibilityGel());
 
         event.setJoinMessage(null);
         player.sendMessage(ChatColor.GREEN + "Welcome to " + ChatColor.BOLD + "Eye Of Ender! " + ChatColor.GREEN + "Click a sign to join a server.");
@@ -117,21 +117,21 @@ public class PlayerListener implements Listener {
 
         if ((event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 
-            if (event.getItem().isSimilar(Menu.invisibleGelInactive())) {
+            if (event.getItem().isSimilar(Menu.invisibilityGel())) {
                 player.playSound(player.getLocation(), Sound.SLIME_ATTACK, 20L, 10L);
                 for (Player players : Bukkit.getOnlinePlayers()) {
                     player.hidePlayer(players);
                 }
                 plugin.invisible.add(player);
-                player.setItemInHand(Menu.invisibleGelActive());
+                player.setItemInHand(Menu.visiblityGel());
                 player.sendMessage(ChatColor.BLUE + "Players are now invisible!");
-            } else if (event.getItem().isSimilar(Menu.invisibleGelActive())) {
+            } else if (event.getItem().isSimilar(Menu.visiblityGel())) {
                 player.playSound(player.getLocation(), Sound.SLIME_ATTACK, 20L, 10L);
                 for (Player players : Bukkit.getOnlinePlayers()) {
                     player.showPlayer(players);
                 }
                 plugin.invisible.remove(player);
-                player.setItemInHand(Menu.invisibleGelInactive());
+                player.setItemInHand(Menu.invisibilityGel());
                 player.sendMessage(ChatColor.BLUE + "Players are now visible!");
             }
         }

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -21,7 +22,7 @@ import com.eyeofender.eoehub.EOEHub;
 import com.google.common.collect.Maps;
 
 public class Menu implements Listener {
-    public static Inventory myInventory = Bukkit.createInventory(null, 9, "    -=- Eye Of Ender Hub -=-");
+    public static Inventory myInventory = Bukkit.createInventory(null, 9, "   -=- Eye Of Ender Hub -=-");
     private static Map<ItemStack, Integer> icons = Maps.newHashMap();
 
     private static EOEHub plugin;
@@ -29,10 +30,10 @@ public class Menu implements Listener {
     public static void init(EOEHub plugin) {
         Menu.plugin = plugin;
 
-        createDisplay(Material.BOW, myInventory, 1, "Archer Games", "Click to view");
-        createDisplay(Material.BLAZE_POWDER, myInventory, 3, "Search & Destroy", "Click to view");
-        createDisplay(Material.DIAMOND_SWORD, myInventory, 5, "Hunger Games", "Click to view");
-        createDisplay(Material.IRON_BLOCK, myInventory, 7, "Arcade Games", "Click to view");
+        createDisplay(Material.BOW, myInventory, 1, "Archer Games", "Click to teleport");
+        createDisplay(Material.BLAZE_POWDER, myInventory, 3, "Search & Destroy", "Click to teleport");
+        createDisplay(Material.DIAMOND_SWORD, myInventory, 5, "Survival Games", "Click to teleport");
+        createDisplay(Material.RECORD_4, myInventory, 7, "Arcade Games", "Click to teleport");
     }
 
     @EventHandler
@@ -59,7 +60,7 @@ public class Menu implements Listener {
     public void onMenuClick(PlayerInteractEvent event) {
         if (event.getItem() == null) return;
         if ((event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
-                && event.getItem().getType() == Material.COMPASS) {
+                && event.getItem().isSimilar(menuItem())) {
             event.getPlayer().openInventory(myInventory);
         }
     }
@@ -77,22 +78,22 @@ public class Menu implements Listener {
         icons.put(item, slot);
     }
 
-    public static ItemStack menuCompass() {
-        ItemStack item = new ItemStack(Material.COMPASS);
+    public static ItemStack menuItem() {
+        ItemStack item = new ItemStack(Material.EYE_OF_ENDER);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("Server List");
+        meta.setDisplayName(ChatColor.DARK_GREEN + "EOE Servers");
         ArrayList<String> Lore = new ArrayList<String>();
-        Lore.add("Click to pick server.");
+        Lore.add("Click to pick server");
         meta.setLore(Lore);
         item.setItemMeta(meta);
 
         return item;
     }
 
-    public static ItemStack invisibleGelInactive() {
+    public static ItemStack invisibilityGel() {
         ItemStack item = new ItemStack(Material.MAGMA_CREAM);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("Invisibility Gel");
+        meta.setDisplayName(ChatColor.BLUE + "Invisibility Gel");
         ArrayList<String> Lore = new ArrayList<String>();
         Lore.add("Toggles player visibility.");
         meta.setLore(Lore);
@@ -101,10 +102,10 @@ public class Menu implements Listener {
         return item;
     }
 
-    public static ItemStack invisibleGelActive() {
+    public static ItemStack visiblityGel() {
         ItemStack item = new ItemStack(Material.SLIME_BALL);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("Visibility Gel");
+        meta.setDisplayName(ChatColor.BLUE + "Visibility Gel");
         ArrayList<String> Lore = new ArrayList<String>();
         Lore.add("Toggles player visibility.");
         meta.setLore(Lore);
