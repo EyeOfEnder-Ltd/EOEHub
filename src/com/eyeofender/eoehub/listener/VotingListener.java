@@ -21,12 +21,26 @@ public class VotingListener implements Listener {
 
     @EventHandler
     public void onVote(VotifierEvent event) {
-        Vote vote = event.getVote();
-        String p = vote.getUsername();
-        int amount = plugin.getConfig().getInt("votingAmount");
+        Boolean premium = false;
 
-        CurrencyMain.api.pay(p, amount, false);
-        Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "broadcast ALL " + ChatColor.RED + "[ " + ChatColor.BLUE + "Voting" + ChatColor.RED + " ] " + ChatColor.RED + p
-                + " has voted and received $1,000. Type /Vote.");
+        try {
+            URL url = new URL("http://www.minecraft.net/haspaid.jsp?user=" + player);
+            String pr = new BufferedReader(new InputStreamReader(url.openStream())).readLine().toUpperCase();
+            premium = Boolean.valueOf(pr);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return premium;
+        
+        if(premium == true){
+            Vote vote = event.getVote();
+            String p = vote.getUsername();
+            int amount = plugin.getConfig().getInt("votingAmount");
+    
+            CurrencyMain.api.pay(p, amount, false);
+            Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "broadcast ALL " + ChatColor.RED + "[ " + ChatColor.BLUE + "Voting" + ChatColor.RED + " ] " + ChatColor.RED + p
+                    + " has voted and received $1,000. Type /Vote.");
+        }
     }
 }
