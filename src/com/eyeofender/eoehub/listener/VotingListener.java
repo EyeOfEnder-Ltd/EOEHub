@@ -1,5 +1,9 @@
 package com.eyeofender.eoehub.listener;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+
 import me.libraryaddict.Currency.CurrencyMain;
 
 import org.bukkit.Bukkit;
@@ -24,15 +28,13 @@ public class VotingListener implements Listener {
         Boolean premium = false;
 
         try {
-            URL url = new URL("http://www.minecraft.net/haspaid.jsp?user=" + player);
+            URL url = new URL("http://www.minecraft.net/haspaid.jsp?user=" + event.getVote().getUsername());
             String pr = new BufferedReader(new InputStreamReader(url.openStream())).readLine().toUpperCase();
             premium = Boolean.valueOf(pr);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return premium;
-        
         if(premium == true){
             Vote vote = event.getVote();
             String p = vote.getUsername();
