@@ -17,6 +17,8 @@ import com.vexsoftware.votifier.model.VotifierEvent;
 
 public class VotingListener implements Listener {
 
+    private static final String PREFIX = ChatColor.RED + "[ " + ChatColor.BLUE + "Voting" + ChatColor.RED + " ] " + ChatColor.RED;
+
     private EOEHub plugin;
 
     public VotingListener(EOEHub plugin) {
@@ -25,7 +27,7 @@ public class VotingListener implements Listener {
 
     @EventHandler
     public void onVote(VotifierEvent event) {
-        Boolean premium = false;
+        boolean premium = false;
 
         try {
             URL url = new URL("http://www.minecraft.net/haspaid.jsp?user=" + event.getVote().getUsername());
@@ -35,14 +37,13 @@ public class VotingListener implements Listener {
             e.printStackTrace();
         }
 
-        if(premium == true){
+        if (premium) {
             Vote vote = event.getVote();
-            String p = vote.getUsername();
+            String player = vote.getUsername();
             int amount = plugin.getConfig().getInt("votingAmount");
-    
-            CurrencyMain.api.pay(p, amount, false);
-            Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "broadcast ALL " + ChatColor.RED + "[ " + ChatColor.BLUE + "Voting" + ChatColor.RED + " ] " + ChatColor.RED + p
-                    + " has voted and received $1,000. Type /Vote.");
+
+            CurrencyMain.api.pay(player, amount, false);
+            Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "broadcast ALL " + PREFIX + player + " has voted and received $1,000. Type /Vote.");
         }
     }
 }
