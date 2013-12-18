@@ -73,7 +73,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        Block feet = event.getTo().getBlock().getRelative(0, -1, 0);
+        Block feet = event.getPlayer().getLocation().getBlock();
         if (feet != null && feet.getType() == Material.STONE_PLATE) {
             event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(5));
             event.getPlayer().setVelocity(new Vector(event.getPlayer().getVelocity().getX(), 1.0D, event.getPlayer().getVelocity().getZ()));
@@ -83,6 +83,9 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
+            if (event.getCause() == DamageCause.LAVA || event.getCause() == DamageCause.FIRE || event.getCause() == DamageCause.FIRE_TICK) {
+                event.getEntity().setFireTicks(0);
+            }
             if (event.getCause() != DamageCause.VOID) {
                 event.setCancelled(true);
             }
