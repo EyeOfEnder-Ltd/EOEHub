@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,6 +21,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -70,16 +72,11 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
-        if (event.getAction() == Action.PHYSICAL) {
-            // The player triggered a physical interaction event
-
-            if (event.getClickedBlock().getType() == Material.STONE_PLATE) {
-                // The player stepped on a stone pressure plate
-
-                event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(5));
-                event.getPlayer().setVelocity(new Vector(event.getPlayer().getVelocity().getX(), 1.0D, event.getPlayer().getVelocity().getZ()));
-            }
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Block feet = event.getTo().getBlock().getRelative(0, -1, 0);
+        if (feet != null && feet.getType() == Material.STONE_PLATE) {
+            event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(5));
+            event.getPlayer().setVelocity(new Vector(event.getPlayer().getVelocity().getX(), 1.0D, event.getPlayer().getVelocity().getZ()));
         }
     }
 
