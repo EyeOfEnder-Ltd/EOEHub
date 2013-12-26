@@ -25,7 +25,7 @@ public class BarTimer implements Runnable {
     }
 
     public void init() {
-        messages = ImmutableList.of("Eye of Ender | hub.playeoe.com", "Coming Soon | Search & Destroy", "Website | www.eyeofender.com", "Coming Soon | Survival Games");
+        messages = ImmutableList.of("Eye of Ender | hub.playeoe.com", "New Gamemode | Dodgeball", "Website | www.eyeofender.com", "New Gamemode | Survival Games");
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, 0L, 5 * 20L);
     }
 
