@@ -30,6 +30,7 @@ import org.bukkit.util.Vector;
 
 import com.eyeofender.eoehub.EOEHub;
 import com.eyeofender.eoehub.menus.Menu;
+import com.eyeofender.eoehub.menus.ModMenu;
 
 public class PlayerListener implements Listener {
 
@@ -47,6 +48,7 @@ public class PlayerListener implements Listener {
 
         Inventory i = player.getInventory();
         i.setItem(0, Menu.menuItem());
+        i.setItem(4, ModMenu.menuItem());
         i.setItem(8, Menu.invisibilityGel());
 
         event.setJoinMessage(null);
@@ -77,6 +79,7 @@ public class PlayerListener implements Listener {
         if (feet != null && feet.getType() == Material.STONE_PLATE) {
             event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(5));
             event.getPlayer().setVelocity(new Vector(event.getPlayer().getVelocity().getX(), 1.0D, event.getPlayer().getVelocity().getZ()));
+            event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.CAT_MEOW, 5, 5);
         }
     }
 
